@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekt Ataraxia | Die Praxis für Seelenruhe</title>
+    <style>
+        /* Basis-Styling & Variablen */
+        :root {
+            --bg-color: #0a0f16;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-1: #38bdf8; /* Helles Blau */
+            --accent-2: #818cf8; /* Sanftes Lila */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Liquid Animation Backgrounds */
+        .liquid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #111827, var(--bg-color));
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--accent-1);
+            top: -10%;
+            left: -10%;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        }
+
+        .blob-2 {
+            width: 600px;
+            height: 600px;
+            background: var(--accent-2);
+            bottom: -20%;
+            right: -10%;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            50% { transform: translate(100px, 50px) rotate(180deg) scale(1.1); border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            100% { transform: translate(-50px, 100px) rotate(360deg) scale(0.9); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+        }
+
+        /* Glassmorphism Klassen */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Layout & Sections */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Hero Section & Animiertes Logo */
+        #hero {
+            text-align: center;
+        }
+
+        .logo-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 2rem auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-glass {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);
+            animation: pulse 4s infinite alternate;
+        }
+
+        .logo-symbol {
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            z-index: 2;
+            text-shadow: 0 0 20px var(--accent-1);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); }
+            100% { transform: scale(1.05); box-shadow: 0 0 40px rgba(129, 140, 248, 0.4); }
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        /* Button */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* About Section */
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .team-member {
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            margin: 0 auto 1.5rem auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 0 20px rgba(129, 140, 248, 0.3);
+        }
+
+        .member-name {
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-role {
+            color: var(--accent-1);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        /* Scroll Animations (Versteckt bis sie in den Viewport kommen) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .about-grid, .team-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="liquid-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <section id="hero">
+        <div class="container reveal">
+            <div class="logo-container">
+                <div class="logo-glass"></div>
+                <div class="logo-symbol">A</div>
+            </div>
+            <h1>Projekt Ataraxia</h1>
+            <p class="subtitle">Die Praxis für philosophische Seelenruhe.</p>
+            <a href="#about" class="btn">Treten Sie ein</a>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container glass-panel reveal">
+            <h2>Die Überwindung der Unruhe</h2>
+            <div class="about-grid">
+                <div>
+                    <h3>Das Problem: Tarache</h3>
+                    <p style="margin-top: 1rem; color: var(--text-muted);">In einer Welt voller Lärm, Leistungsdruck und eitlen Begierden (Kene-Doxa) verlieren wir uns oft in ständiger Vorwärtsbewegung. Wir suchen das Glück am Ende von 10.000 Kilometern, auf Social Media oder in der endlosen Anhäufung von Dingen. Das Resultat ist Tarache – die tiefe innere Unruhe.</p>
+                </div>
+                <div>
+                    <h3>Die Lösung: Ataraxia</h3>
+                    <p style="margin-top: 1rem; color: var(--text-muted);">Wir lehren die katastematische Lust: Die vollkommene Ruhe im Stillstand. Wer lernt, seine Begierden rational zu filtern und sich an dem zu erfreuen, was natürlich und notwendig ist, erreicht wahre Autarkie. Ein Glas Wasser wird zur höchsten Erfüllung. Die Seele wird unerschütterlich.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="team">
+        <div class="container">
+            <h2 class="reveal">Ihre Begleiter zur Klarheit</h2>
+            <div class="team-grid">
+                
+                <div class="glass-panel team-member reveal" style="transition-delay: 0.1s;">
+                    <div class="member-avatar">L</div>
+                    <div class="member-name">Dr. Logos</div>
+                    <div class="member-role">Meister der Diagnostik</div>
+                    <p style="color: var(--text-muted);">Mit analytischer Präzision dekonstruiert Dr. Logos Ihre Matrix der Begierden. Er trennt das Notwendige vom Eitlen und zeigt Ihnen schonungslos, wo Ihre innere Unruhe (Tarache) ihren Ursprung hat.</p>
+                </div>
+
+                <div class="glass-panel team-member reveal" style="transition-delay: 0.3s;">
+                    <div class="member-avatar">M</div>
+                    <div class="member-name">Mareike</div>
+                    <div class="member-role">Philosophische Therapeutin</div>
+                    <p style="color: var(--text-muted);">Mareike ist das Herz der Praxis. Sie begleitet Sie auf dem Weg in die Autarkie (Selbstgenügsamkeit) und hilft Ihnen, das theoretische Konstrukt der Seelenruhe im realen Leben erfahrbar zu machen.</p>
+                </div>
+
+            </div>
+            
+            <div style="text-align: center; margin-top: 4rem;" class="reveal">
+                <a href="#" class="btn" style="background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); border: none;">Beratung anfragen</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Intersection Observer für das Einblenden der Elemente beim Scrollen
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150; // Ab wann das Element einblenden soll
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
+        // Event Listener an den Scroll binden
+        window.addEventListener("scroll", reveal);
+        
+        // Initialer Aufruf, damit Elemente oben direkt sichtbar sind
+        reveal();
+    </script>
+</body>
+</html>
