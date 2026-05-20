@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="de" class="h-full bg-slate-900 text-slate-100">
+<html lang="de" class="h-full bg-slate-950 text-slate-100 selection:bg-indigo-500/30">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lautstärke-Ampel für Papa</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,60 +11,102 @@
             theme: {
                 extend: {
                     colors: {
-                        ampelRed: '#ef4444',
-                        ampelYellow: '#eab308',
-                        ampelGreen: '#22c55e',
+                        ampelRed: '#ff3b30',
+                        ampelYellow: '#ffcc00',
+                        ampelGreen: '#34c759',
                     },
                     boxShadow: {
-                        'red-glow': '0 0 50px 15px rgba(239, 68, 68, 0.6)',
-                        'yellow-glow': '0 0 50px 15px rgba(234, 179, 8, 0.6)',
-                        'green-glow': '0 0 50px 15px rgba(34, 197, 94, 0.6)',
+                        'neon-red': '0 0 40px 10px rgba(255, 59, 48, 0.5), inset 0 0 20px 5px rgba(255, 59, 48, 0.4)',
+                        'neon-yellow': '0 0 40px 10px rgba(255, 204, 0, 0.5), inset 0 0 20px 5px rgba(255, 204, 0, 0.4)',
+                        'neon-green': '0 0 40px 10px rgba(52, 199, 89, 0.5), inset 0 0 20px 5px rgba(52, 199, 89, 0.4)',
+                        'glass-inner': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 0 rgba(0, 0, 0, 0.2)',
                     }
                 }
             }
         }
     </script>
     <style>
-        @keyframes pulse-slow {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-        .pulse-active {
-            animation: pulse-slow 2s infinite;
-        }
-        @keyframes gradient-bg {
+        /* Smooth, slow-moving mesh gradient background */
+        @keyframes mesh-ambient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-        .bg-animated-gradient {
-            background: linear-gradient(-45deg, #0f172a, #312e81, #4c1d95, #0f172a);
-            background-size: 400% 400%;
-            animation: gradient-bg 15s ease infinite;
+        .bg-mesh-glow {
+            background: radial-gradient(circle at 10% 20%, rgba(49, 46, 129, 0.4) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(76, 29, 149, 0.4) 0%, transparent 40%),
+                        radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 1) 0%, rgba(2, 6, 23, 1) 100%);
+            background-size: 200% 200%;
+            animation: mesh-ambient 20s ease infinite;
         }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+
+        /* Advanced glassmorphism panels */
+        .glass-premium {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        /* Pulsing light animations */
+        @keyframes light-glow-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.03); opacity: 0.85; }
+        }
+        .glow-active {
+            animation: light-glow-pulse 1.8s infinite ease-in-out;
+        }
+
+        /* Liquid lens glare overlay */
+        .lens-reflection {
+            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+        }
+        
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 99px;
         }
     </style>
 </head>
-<body class="h-full flex flex-col justify-between font-sans overflow-x-hidden bg-animated-gradient text-slate-100">
+<body class="h-full flex flex-col justify-between font-sans overflow-x-hidden bg-mesh-glow text-slate-100 select-none">
 
-    <!-- Header -->
-    <header class="glass-panel border-b-0 px-6 py-4 flex items-center justify-between z-10 relative">
+    <!-- Header / Navigation -->
+    <header class="glass-premium px-6 py-4 flex items-center justify-between z-30 sticky top-0">
         <div class="flex items-center space-x-3">
-            <div class="w-3 h-3 rounded-full bg-ampelRed animate-ping shadow-[0_0_10px_rgba(239,68,68,0.8)]"></div>
-            <!-- Schriftzug entfernt -->
+            <div class="relative flex h-3.5 w-3.5">
+                <span id="headerDotPing" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-ampelGreen opacity-75"></span>
+                <span id="headerDot" class="relative inline-flex rounded-full h-3.5 w-3.5 bg-ampelGreen shadow-[0_0_10px_rgba(52,199,89,0.8)]"></span>
+            </div>
+            <span class="text-xs font-semibold tracking-widest text-slate-400 uppercase">Live-Ampel</span>
         </div>
-        <div class="flex items-center space-x-2">
-            <span id="roleBadge" class="px-3 py-1 text-xs font-semibold rounded-full bg-black/30 border border-white/10 text-slate-300 backdrop-blur-md">
-                Wähle eine Rolle...
+        <div class="flex items-center space-x-3">
+            <!-- Install App Trigger -->
+            <button id="installAppBtn" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 hover:border-indigo-400/40 text-indigo-300 transition-all duration-300 transform active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+                <span>App installieren</span>
+            </button>
+            <span id="roleBadge" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-white/5 border border-white/10 text-slate-300 backdrop-blur-md">
+                Wird verbunden...
             </span>
-            <button id="changeRoleBtn" class="text-xs text-indigo-300 hover:text-white transition cursor-pointer hidden">
-                Rolle wechseln
+            <button id="changeRoleBtn" class="text-xs font-semibold text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg p-1.5 px-3 transition duration-300 hidden">
+                Wechseln
             </button>
         </div>
     </header>
@@ -72,135 +114,214 @@
     <!-- Main Content Area -->
     <main class="flex-grow flex flex-col items-center justify-center p-4 md:p-8 max-w-4xl mx-auto w-full z-10 relative">
         
-        <!-- LOADING SPINNER -->
+        <!-- LOADING SCREEN -->
         <div id="loadingScreen" class="flex flex-col items-center space-y-4">
-            <div class="w-12 h-12 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin drop-shadow-[0_0_15px_rgba(129,140,248,0.5)]"></div>
-            <p class="text-indigo-200 text-sm font-medium">Verbindung zur Ampel wird hergestellt...</p>
+            <div class="relative flex items-center justify-center">
+                <div class="w-16 h-16 border-4 border-indigo-500/30 border-t-indigo-400 rounded-full animate-spin"></div>
+                <div class="absolute w-8 h-8 bg-indigo-500/10 rounded-full animate-pulse"></div>
+            </div>
+            <p class="text-indigo-200 text-sm font-semibold tracking-wide">Sicheres Netzwerk wird aufgebaut...</p>
         </div>
 
         <!-- ROLE SELECTION SCREEN -->
-        <div id="roleSelectionScreen" class="hidden w-full max-w-md space-y-6 animate-fade-in">
-            <div class="text-center space-y-2 mb-6 glass-panel p-6 rounded-3xl">
-                <h2 class="text-2xl font-bold text-white drop-shadow-md">Wer benutzt diese App?</h2>
-                <p class="text-indigo-200 text-sm">Wähle deine Rolle aus, um fortzufahren.</p>
+        <div id="roleSelectionScreen" class="hidden w-full max-w-lg space-y-8 animate-fade-in px-2">
+            <div class="text-center space-y-3 mb-4">
+                <h2 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight">Lautstärke-Ampel</h2>
+                <p class="text-slate-400 text-sm max-w-sm mx-auto">Verbinde die Geräte deiner Eltern in Echtzeit. Bitte wähle deine Rolle aus.</p>
             </div>
 
-            <div class="grid grid-cols-1 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <!-- Mutter Button -->
-                <button id="selectMotherBtn" class="flex items-center p-5 glass-panel hover:bg-white/10 rounded-2xl transition duration-300 text-left group transform hover:-translate-y-1">
-                    <div class="p-3 bg-pink-500/20 rounded-xl text-pink-300 group-hover:scale-110 transition duration-300 mr-4 shadow-[0_0_15px_rgba(236,72,153,0.3)]">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button id="selectMotherBtn" class="flex flex-col items-center justify-center p-8 glass-premium hover:bg-white/5 border border-white/5 hover:border-pink-500/30 rounded-3xl transition duration-300 text-center group transform hover:-translate-y-2">
+                    <div class="p-4 bg-pink-500/10 rounded-2xl text-pink-400 group-hover:scale-110 group-hover:bg-pink-500/20 transition duration-300 mb-4 shadow-[0_0_30px_rgba(236,72,153,0.15)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                         </svg>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-lg text-white">Mutter (Steuerung)</h3>
-                        <p class="text-xs text-indigo-200/70 mt-1">Du kannst die Ampelfarben ändern. Passwortgeschützt.</p>
-                    </div>
+                    <h3 class="font-extrabold text-xl text-white">Mutter</h3>
+                    <span class="text-xs text-pink-400 font-bold mt-1 tracking-wider uppercase">Fernsteuerung</span>
+                    <p class="text-xs text-slate-400 mt-3 max-w-[200px]">Du steuerst das Signal auf dem Bildschirm vom Vater per Fingertipp.</p>
                 </button>
 
                 <!-- Vater Button -->
-                <button id="selectFatherBtn" class="flex items-center p-5 glass-panel hover:bg-white/10 rounded-2xl transition duration-300 text-left group transform hover:-translate-y-1">
-                    <div class="p-3 bg-blue-500/20 rounded-xl text-blue-300 group-hover:scale-110 transition duration-300 mr-4 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button id="selectFatherBtn" class="flex flex-col items-center justify-center p-8 glass-premium hover:bg-white/5 border border-white/5 hover:border-blue-500/30 rounded-3xl transition duration-300 text-center group transform hover:-translate-y-2">
+                    <div class="p-4 bg-blue-500/10 rounded-2xl text-blue-400 group-hover:scale-110 group-hover:bg-blue-500/20 transition duration-300 mb-4 shadow-[0_0_30px_rgba(59,130,246,0.15)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-lg text-white">Vater (Anzeige)</h3>
-                        <p class="text-xs text-indigo-200/70 mt-1">Du siehst die aktuelle Ampel live auf deinem Bildschirm.</p>
-                    </div>
+                    <h3 class="font-extrabold text-xl text-white">Vater</h3>
+                    <span class="text-xs text-blue-400 font-bold mt-1 tracking-wider uppercase">Live-Anzeige</span>
+                    <p class="text-xs text-slate-400 mt-3 max-w-[200px]">Du siehst die Ampelfarbe groß und bekommst Audio-Hinweise.</p>
                 </button>
             </div>
         </div>
 
         <!-- PASSWORD PROMPT FOR MOTHER -->
         <div id="passwordScreen" class="hidden w-full max-w-sm space-y-6 animate-fade-in">
-            <div class="glass-panel p-6 rounded-3xl space-y-4">
-                <div class="text-center">
-                    <h3 class="text-lg font-bold text-white drop-shadow-md">Sicherheitsprüfung</h3>
-                    <p class="text-xs text-indigo-200 mt-1">Bitte gib das Passwort ein, damit nur du die Ampel steuern kannst.</p>
+            <div class="glass-premium p-8 rounded-3xl space-y-6 border border-white/10 relative overflow-hidden">
+                <div class="absolute -right-10 -top-10 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl"></div>
+                <div class="text-center relative">
+                    <h3 class="text-xl font-extrabold text-white">Zutrittskontrolle</h3>
+                    <p class="text-xs text-slate-400 mt-2">Bitte gib das Passwort ein, um die Ampelsteuerung freizuschalten.</p>
                 </div>
-                <div>
-                    <input type="password" id="motherPasswordInput" placeholder="Passwort eingeben" class="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent text-center tracking-widest text-lg backdrop-blur-sm transition">
-                    <p id="passwordError" class="text-red-400 text-xs mt-2 text-center hidden font-medium">Falsches Passwort!</p>
+                <div class="space-y-3 relative">
+                    <input type="password" id="motherPasswordInput" placeholder="Sicherheitscode eingeben" class="w-full px-4 py-3.5 bg-black/40 border border-white/10 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 text-center tracking-widest text-lg font-bold backdrop-blur-md transition duration-300 placeholder:text-slate-600 placeholder:tracking-normal">
+                    <p id="passwordError" class="text-red-400 text-xs font-semibold text-center hidden">Falsches Passwort!</p>
                 </div>
-                <div class="flex space-x-2">
-                    <button id="cancelPasswordBtn" class="w-1/2 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl font-medium transition duration-300 text-sm">Abbrechen</button>
-                    <button id="submitPasswordBtn" class="w-1/2 py-2.5 bg-indigo-500/80 hover:bg-indigo-400/80 border border-indigo-400/30 text-white rounded-xl font-medium transition duration-300 text-sm shadow-[0_0_15px_rgba(99,102,241,0.4)]">Bestätigen</button>
+                <div class="flex space-x-3 relative">
+                    <button id="cancelPasswordBtn" class="w-1/2 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl font-bold transition duration-300 text-xs uppercase tracking-wider">Abbrechen</button>
+                    <button id="submitPasswordBtn" class="w-1/2 py-3 bg-gradient-to-r from-pink-600 to-pink-500 hover:from-pink-500 hover:to-pink-400 text-white rounded-2xl font-bold transition duration-300 text-xs uppercase tracking-wider shadow-[0_4px_20px_rgba(236,72,153,0.3)]">Freischalten</button>
                 </div>
             </div>
         </div>
 
         <!-- MAIN TRAFFIC LIGHT INTERFACE -->
-        <div id="ampelInterface" class="hidden w-full max-w-lg flex flex-col items-center space-y-8 animate-fade-in">
+        <div id="ampelInterface" class="hidden w-full max-w-2xl flex flex-col items-center space-y-8 animate-fade-in px-2">
             
-            <!-- Information / Status Banner -->
-            <div id="statusBanner" class="w-full py-3 px-4 rounded-2xl text-center text-sm font-semibold transition-all duration-500 glass-panel">
-                Wird geladen...
+            <!-- Status Banner -->
+            <div id="statusBanner" class="w-full py-4 px-6 rounded-2xl text-center text-sm font-extrabold transition-all duration-500 glass-premium border border-white/10 tracking-wide uppercase shadow-lg">
+                Wird synchronisiert...
             </div>
 
             <!-- THE AMPEL (TRAFFIC LIGHT) BOARD -->
-            <div class="glass-panel p-8 rounded-[50px] flex flex-col space-y-8 w-full max-w-[300px] items-center relative transform transition duration-500 hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]">
-                
+            <div id="ampelHousing" class="glass-premium p-8 py-10 rounded-[60px] flex flex-col space-y-7 w-full max-w-[290px] items-center relative transition-all duration-500 shadow-[0_15px_60px_rgba(0,0,0,0.6)] border border-white/10">
+                <!-- Glossy inner rim to make the traffic light body look 3D and premium -->
+                <div class="absolute inset-2 rounded-[52px] border border-white/5 pointer-events-none"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent rounded-[60px] pointer-events-none"></div>
+
                 <!-- Red Light -->
-                <button id="lightRed" class="w-40 h-40 rounded-full transition-all duration-500 relative flex items-center justify-center border-4 border-white/5 bg-black/40 overflow-hidden group" disabled>
-                    <div class="absolute inset-0 rounded-full opacity-20 bg-red-600 group-hover:opacity-40 transition-opacity duration-300"></div>
-                    <div class="absolute top-2 left-4 w-16 h-8 bg-white/20 rounded-full blur-[4px] -rotate-45"></div>
-                    <span class="text-white font-black text-2xl tracking-wider select-none hidden drop-shadow-md z-10" id="redText">STOPP</span>
+                <button id="lightRed" class="w-44 h-44 rounded-full transition-all duration-500 relative flex items-center justify-center border-4 border-slate-950 bg-slate-900/60 overflow-hidden group shadow-glass-inner" disabled>
+                    <div class="absolute inset-0 rounded-full opacity-10 bg-ampelRed group-hover:opacity-25 transition-opacity duration-300"></div>
+                    <!-- Liquid Glass Reflection top-left -->
+                    <div class="absolute top-2 left-6 w-20 h-10 lens-reflection rounded-full opacity-60 pointer-events-none"></div>
+                    <!-- Glow element inside -->
+                    <div id="glowRed" class="absolute inset-0 rounded-full opacity-0 transition-all duration-500 bg-gradient-to-b from-red-400 to-red-600"></div>
+                    <span class="text-white font-black text-2xl tracking-widest select-none hidden drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] z-10" id="redText">LEISE!</span>
                 </button>
 
                 <!-- Yellow Light -->
-                <button id="lightYellow" class="w-40 h-40 rounded-full transition-all duration-500 relative flex items-center justify-center border-4 border-white/5 bg-black/40 overflow-hidden group" disabled>
-                    <div class="absolute inset-0 rounded-full opacity-20 bg-yellow-500 group-hover:opacity-40 transition-opacity duration-300"></div>
-                    <div class="absolute top-2 left-4 w-16 h-8 bg-white/20 rounded-full blur-[4px] -rotate-45"></div>
-                    <span class="text-white font-black text-2xl tracking-wider select-none hidden drop-shadow-md z-10" id="yellowText">LEISER</span>
+                <button id="lightYellow" class="w-44 h-44 rounded-full transition-all duration-500 relative flex items-center justify-center border-4 border-slate-950 bg-slate-900/60 overflow-hidden group shadow-glass-inner" disabled>
+                    <div class="absolute inset-0 rounded-full opacity-10 bg-ampelYellow group-hover:opacity-25 transition-opacity duration-300"></div>
+                    <!-- Liquid Glass Reflection top-left -->
+                    <div class="absolute top-2 left-6 w-20 h-10 lens-reflection rounded-full opacity-60 pointer-events-none"></div>
+                    <!-- Glow element inside -->
+                    <div id="glowYellow" class="absolute inset-0 rounded-full opacity-0 transition-all duration-500 bg-gradient-to-b from-yellow-300 to-yellow-500"></div>
+                    <span class="text-slate-950 font-black text-2xl tracking-widest select-none hidden drop-shadow-[0_1px_2px_rgba(255,255,255,0.4)] z-10" id="yellowText">ACHTUNG</span>
                 </button>
 
                 <!-- Green Light -->
-                <button id="lightGreen" class="w-40 h-40 rounded-full transition-all duration-500 relative flex items-center justify-center border-4 border-white/5 bg-black/40 overflow-hidden group" disabled>
-                    <div class="absolute inset-0 rounded-full opacity-20 bg-green-500 group-hover:opacity-40 transition-opacity duration-300"></div>
-                    <div class="absolute top-2 left-4 w-16 h-8 bg-white/20 rounded-full blur-[4px] -rotate-45"></div>
-                    <span class="text-white font-black text-2xl tracking-wider select-none hidden drop-shadow-md z-10" id="greenText">SUPER</span>
+                <button id="lightGreen" class="w-44 h-44 rounded-full transition-all duration-500 relative flex items-center justify-center border-4 border-slate-950 bg-slate-900/60 overflow-hidden group shadow-glass-inner" disabled>
+                    <div class="absolute inset-0 rounded-full opacity-10 bg-ampelGreen group-hover:opacity-25 transition-opacity duration-300"></div>
+                    <!-- Liquid Glass Reflection top-left -->
+                    <div class="absolute top-2 left-6 w-20 h-10 lens-reflection rounded-full opacity-60 pointer-events-none"></div>
+                    <!-- Glow element inside -->
+                    <div id="glowGreen" class="absolute inset-0 rounded-full opacity-0 transition-all duration-500 bg-gradient-to-b from-green-300 to-green-500"></div>
+                    <span class="text-white font-black text-2xl tracking-widest select-none hidden drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] z-10" id="greenText">SUPER</span>
                 </button>
             </div>
 
             <!-- FATHER ONLY EXTRA SETTINGS -->
-            <div id="fatherSettings" class="hidden w-full glass-panel rounded-3xl p-6 space-y-5">
-                <h4 class="text-sm font-bold text-white uppercase tracking-wider drop-shadow-md">Einstellungen (Papa):</h4>
+            <div id="fatherSettings" class="hidden w-full glass-premium rounded-3xl p-6 space-y-6 border border-white/10 shadow-xl max-w-lg">
+                <div class="flex items-center justify-between border-b border-white/5 pb-3">
+                    <h4 class="text-sm font-extrabold text-indigo-300 uppercase tracking-widest">Lautsprecher-Optionen (Papa):</h4>
+                    
+                    <!-- Sound Test Trigger -->
+                    <button id="soundTestBtn" class="px-3 py-1 bg-white/5 hover:bg-white/10 active:scale-95 border border-white/10 hover:border-white/20 text-xs font-bold rounded-lg transition-all duration-200 flex items-center space-x-1 text-slate-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                        </svg>
+                        <span>🔊 Testton</span>
+                    </button>
+                </div>
                 
                 <div class="flex flex-col space-y-3">
                     <!-- Audio Beep Trigger -->
-                    <label class="flex items-center justify-between p-4 bg-black/20 rounded-2xl border border-white/5 cursor-pointer hover:bg-white/5 transition duration-300">
-                        <span class="text-sm text-slate-200">Sound-Effekt bei Signal</span>
+                    <label class="flex items-center justify-between p-4 bg-black/30 rounded-2xl border border-white/5 cursor-pointer hover:bg-white/5 transition duration-300">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-bold text-white">Akustisches Signal</span>
+                            <span class="text-xs text-slate-400">Spielt einen dezenten Warnton ab</span>
+                        </div>
                         <input type="checkbox" id="soundToggle" class="sr-only peer" checked>
-                        <div class="relative w-11 h-6 bg-slate-700/50 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500 shadow-inner"></div>
+                        <div class="relative w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500 shadow-inner"></div>
                     </label>
 
                     <!-- Text to Speech Voice Trigger -->
-                    <label class="flex items-center justify-between p-4 bg-black/20 rounded-2xl border border-white/5 cursor-pointer hover:bg-white/5 transition duration-300">
-                        <span class="text-sm text-slate-200">Sprachausgabe ("Bitte leiser!")</span>
+                    <label class="flex items-center justify-between p-4 bg-black/30 rounded-2xl border border-white/5 cursor-pointer hover:bg-white/5 transition duration-300">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-bold text-white">Sprachwarnung</span>
+                            <span class="text-xs text-slate-400">Sagt: "Bitte etwas leiser sprechen!"</span>
+                        </div>
                         <input type="checkbox" id="voiceToggle" class="sr-only peer">
-                        <div class="relative w-11 h-6 bg-slate-700/50 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500 shadow-inner"></div>
+                        <div class="relative w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500 shadow-inner"></div>
                     </label>
-                </div>
-                <div class="text-xs text-indigo-200 bg-indigo-900/30 p-3 rounded-xl border border-indigo-400/20 backdrop-blur-sm">
-                    💡 <strong>Tipp:</strong> Tab im Hintergrund geöffnet lassen. Töne werden auch wiederholt, wenn nochmal gedrückt wird!
                 </div>
             </div>
 
             <!-- MOTHER CONTROLS INSTRUCTIONS -->
-            <div id="motherInstructions" class="hidden text-center text-sm text-indigo-200 max-w-xs glass-panel p-4 rounded-2xl border-indigo-400/20">
-                👉 Klicke auf eine Leuchte. Mehrfaches Klicken auf dieselbe Farbe spielt den Ton bei Papa erneut ab!
+            <div id="motherInstructions" class="hidden text-center text-xs text-indigo-300/80 max-w-sm glass-premium p-4 rounded-2xl border border-white/10 font-medium">
+                👉 <span class="text-white font-bold">Klicke auf die Lampen</span>, um die Farbe auf dem Monitor deines Vaters sofort zu ändern. Wenn du mehrmals klickst, wird der Signalton beim Vater wiederholt!
             </div>
         </div>
 
     </main>
 
+    <!-- INSTALL INSTRUCTIONS MODAL (POPUP) -->
+    <div id="installModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
+        <div class="glass-premium max-w-md w-full rounded-3xl p-6 space-y-5 border border-white/10 shadow-2xl relative">
+            <button id="closeInstallModal" class="absolute top-4 right-4 text-slate-400 hover:text-white bg-white/5 rounded-full p-1.5 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            
+            <div class="text-center space-y-2">
+                <div class="w-16 h-16 bg-indigo-500/10 rounded-2xl border border-indigo-400/30 flex items-center justify-center mx-auto shadow-lg text-indigo-400">
+                    <!-- Dynamic Ampel SVG inside logo -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="8" y="2" width="8" height="20" rx="4" fill="rgba(0,0,0,0.4)" stroke="rgba(255,255,255,0.2)" />
+                        <circle cx="12" cy="7" r="2.5" fill="#ff3b30" />
+                        <circle cx="12" cy="12" r="2.5" fill="#ffcc00" />
+                        <circle cx="12" cy="17" r="2.5" fill="#34c759" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-white mt-2">Als App installieren</h3>
+                <p class="text-xs text-slate-400">Füge die Ampel zu deinem Startbildschirm hinzu, um sie wie eine echte App mit vollem Logo zu nutzen!</p>
+            </div>
+
+            <!-- Steps Tabs -->
+            <div class="space-y-4">
+                <div class="bg-black/20 p-4 rounded-2xl border border-white/5 space-y-3">
+                    <h4 class="text-sm font-bold text-indigo-300 flex items-center space-x-2">
+                        <span>🤖</span> <span>Für Android (Chrome)</span>
+                    </h4>
+                    <ol class="list-decimal list-inside text-xs text-slate-300 space-y-1.5 pl-1 leading-relaxed">
+                        <li>Klicke oben rechts im Browser auf die <strong class="text-white">3 Punkte (Menü)</strong>.</li>
+                        <li>Wähle <strong class="text-white">"Zum Startbildschirm hinzufügen"</strong> oder <strong class="text-white">"App installieren"</strong>.</li>
+                        <li>Bestätige die Installation. Fertig!</li>
+                    </ol>
+                </div>
+
+                <div class="bg-black/20 p-4 rounded-2xl border border-white/5 space-y-3">
+                    <h4 class="text-sm font-bold text-pink-300 flex items-center space-x-2">
+                        <span>🍏</span> <span>Für iPhone / iOS (Safari)</span>
+                    </h4>
+                    <ol class="list-decimal list-inside text-xs text-slate-300 space-y-1.5 pl-1 leading-relaxed">
+                        <li>Klicke unten in Safari auf den <strong class="text-white">Teilen-Button (Viereck mit Pfeil)</strong>.</li>
+                        <li>Scrolle nach unten und wähle <strong class="text-white">"Zum Home-Bildschirm"</strong>.</li>
+                        <li>Klicke oben rechts auf <strong class="text-white">"Hinzufügen"</strong>.</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <button id="closeInstallModalBtn" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-bold text-xs uppercase tracking-wider transition">Verstanden!</button>
+        </div>
+    </div>
+
     <!-- Footer -->
-    <footer class="glass-panel border-t-0 py-4 px-6 text-center text-xs text-slate-400 mt-auto z-10 relative">
-        Lautstärke-Ampel &copy; 2026. Entwickelt für die beste Arbeitszimmer-Atmosphäre!
+    <footer class="glass-premium border-t-0 py-4 px-6 text-center text-[10px] text-slate-500 mt-auto z-10 relative">
+        Lautstärke-Ampel &copy; 2026. Premium-Schnittstelle für deine Familie.
     </footer>
 
     <!-- Firebase SDK Imports -->
@@ -214,11 +335,52 @@
         const firebaseConfig = {
   apiKey: "AIzaSyB1nVIHbK551nqzsLejDnRY52dVFA_7iKA",
   authDomain: "ampel-2a7e5.firebaseapp.com",
+  databaseURL: "https://ampel-2a7e5-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "ampel-2a7e5",
   storageBucket: "ampel-2a7e5.firebasestorage.app",
   messagingSenderId: "1094677496869",
   appId: "1:1094677496869:web:ee7f78c249282c4572ebcc"
 };
+
+        // Dynamic Manifest generation for installable PWA behavior on Android
+        function injectDynamicManifest() {
+            const svgIcon = `
+                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'>
+                    <rect width='512' height='512' rx='110' fill='#0b0f19'/>
+                    <rect x='156' y='64' width='200' height='384' rx='50' fill='#020617' stroke='#1e293b' stroke-width='10'/>
+                    <circle cx='256' cy='140' r='45' fill='#ff3b30' filter='drop-shadow(0 0 15px rgba(255, 59, 48, 0.6))'/>
+                    <circle cx='256' cy='256' r='45' fill='#ffcc00' filter='drop-shadow(0 0 15px rgba(255, 204, 0, 0.6))'/>
+                    <circle cx='256' cy='372' r='45' fill='#34c759' filter='drop-shadow(0 0 15px rgba(52, 199, 89, 0.6))'/>
+                </svg>
+            `;
+            const encodedSvg = encodeURIComponent(svgIcon).replace(/'/g, "%27").replace(/"/g, "%22");
+            const dataUri = `data:image/svg+xml;utf8,${encodedSvg}`;
+
+            const manifest = {
+                "name": "Lautstärke-Ampel",
+                "short_name": "Ampel",
+                "start_url": window.location.href,
+                "display": "standalone",
+                "background_color": "#020617",
+                "theme_color": "#0f172a",
+                "icons": [
+                    {
+                        "src": dataUri,
+                        "sizes": "512x512",
+                        "type": "image/svg+xml",
+                        "purpose": "any maskable"
+                    }
+                ]
+            };
+            const stringManifest = JSON.stringify(manifest);
+            const blob = new Blob([stringManifest], {type: 'application/json'});
+            const manifestURL = URL.createObjectURL(blob);
+            const link = document.createElement('link');
+            link.rel = 'manifest';
+            link.href = manifestURL;
+            document.head.appendChild(link);
+        }
+        injectDynamicManifest();
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -228,7 +390,7 @@
         // Local state
         let currentUser = null;
         let selectedRole = null; // 'mother' or 'father'
-        let currentStatus = { color: 'green' }; // Default value if db document is not initialized
+        let currentStatus = { color: 'green' };
         let firstLoad = true;
         let audioContext = null;
 
@@ -249,9 +411,14 @@
         const passwordError = document.getElementById('passwordError');
 
         const statusBanner = document.getElementById('statusBanner');
+        const ampelHousing = document.getElementById('ampelHousing');
         const lightRed = document.getElementById('lightRed');
         const lightYellow = document.getElementById('lightYellow');
         const lightGreen = document.getElementById('lightGreen');
+
+        const glowRed = document.getElementById('glowRed');
+        const glowYellow = document.getElementById('glowYellow');
+        const glowGreen = document.getElementById('glowGreen');
 
         const redText = document.getElementById('redText');
         const yellowText = document.getElementById('yellowText');
@@ -261,6 +428,16 @@
         const motherInstructions = document.getElementById('motherInstructions');
         const soundToggle = document.getElementById('soundToggle');
         const voiceToggle = document.getElementById('voiceToggle');
+        const soundTestBtn = document.getElementById('soundTestBtn');
+
+        const headerDot = document.getElementById('headerDot');
+        const headerDotPing = document.getElementById('headerDotPing');
+
+        // Install Modal elements
+        const installAppBtn = document.getElementById('installAppBtn');
+        const installModal = document.getElementById('installModal');
+        const closeInstallModal = document.getElementById('closeInstallModal');
+        const closeInstallModalBtn = document.getElementById('closeInstallModalBtn');
 
         // Firestore reference following Rule 1 (Strict Paths for public data)
         const statusDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'traffic-light', 'status');
@@ -281,7 +458,6 @@
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
-                // Loading finished, show role selection or restore saved role
                 loadingScreen.classList.add('hidden');
                 
                 const savedRole = localStorage.getItem('ampel_user_role');
@@ -318,7 +494,6 @@
 
         // Web Audio API Beep Generator
         function playAlertBeep(frequency, type, duration) {
-            if (!soundToggle.checked) return;
             try {
                 if (!audioContext) {
                     audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -344,7 +519,6 @@
 
         // Text to Speech
         function speakWarning(text) {
-            if (!voiceToggle.checked) return;
             try {
                 if ('speechSynthesis' in window) {
                     const utterance = new SpeechSynthesisUtterance(text);
@@ -361,24 +535,30 @@
         function handleStatusChange(statusData) {
             currentStatus = statusData;
 
-            // Sound alerts if it's NOT the first initial load (for Father)
-            // Die Abfrage auf "oldColor" wurde entfernt, so wird der Sound bei JEDEM Klick (auch auf dieselbe Farbe) getriggert!
+            // Trigger alerts for Father
             if (!firstLoad && selectedRole === 'father') {
                 if (statusData.color === 'yellow') {
-                    // Two quick warm warning tones
-                    playAlertBeep(523.25, 'triangle', 0.2); // C5
-                    setTimeout(() => playAlertBeep(587.33, 'triangle', 0.25), 150); // D5
-                    setTimeout(() => speakWarning("Bitte etwas leiser sprechen"), 600);
+                    if (soundToggle.checked) {
+                        playAlertBeep(523.25, 'triangle', 0.2); // C5
+                        setTimeout(() => playAlertBeep(587.33, 'triangle', 0.25), 150); // D5
+                    }
+                    if (voiceToggle.checked) {
+                        setTimeout(() => speakWarning("Bitte etwas leiser sprechen"), 600);
+                    }
                 } else if (statusData.color === 'red') {
-                    // High-pitched critical warning tones
-                    playAlertBeep(659.25, 'sawtooth', 0.15); // E5
-                    setTimeout(() => playAlertBeep(659.25, 'sawtooth', 0.15), 180);
-                    setTimeout(() => playAlertBeep(659.25, 'sawtooth', 0.4), 360);
-                    setTimeout(() => speakWarning("Bitte sofort leiser sprechen! Es ist viel zu laut."), 800);
+                    if (soundToggle.checked) {
+                        playAlertBeep(659.25, 'sawtooth', 0.15); // E5
+                        setTimeout(() => playAlertBeep(659.25, 'sawtooth', 0.15), 180);
+                        setTimeout(() => playAlertBeep(659.25, 'sawtooth', 0.4), 360);
+                    }
+                    if (voiceToggle.checked) {
+                        setTimeout(() => speakWarning("Bitte sofort leiser sprechen! Es ist zu laut."), 800);
+                    }
                 } else if (statusData.color === 'green') {
-                    // Friendly low notification chime
-                    playAlertBeep(349.23, 'sine', 0.3); // F4
-                    setTimeout(() => playAlertBeep(523.25, 'sine', 0.4), 200); // C5
+                    if (soundToggle.checked) {
+                        playAlertBeep(349.23, 'sine', 0.3); // F4
+                        setTimeout(() => playAlertBeep(523.25, 'sine', 0.4), 200); // C5
+                    }
                 }
             }
             firstLoad = false;
@@ -390,7 +570,6 @@
         async function saveStatus(color) {
             if (!currentUser) return;
             try {
-                // Bei jedem Klick wird ein neuer Zeitstempel gesetzt. Dadurch reagiert Firebase jedes Mal!
                 await setDoc(statusDocRef, {
                     color: color,
                     updatedAt: new Date().toISOString(),
@@ -405,47 +584,65 @@
         function updateAmpelUI() {
             const color = currentStatus.color;
 
-            // Reset all lights to glass styling
-            lightRed.className = "w-40 h-40 rounded-full transition-all duration-500 relative flex items-center justify-center border-4 border-white/5 bg-black/40 overflow-hidden group";
-            lightYellow.className = "w-40 h-40 rounded-full transition-all duration-500 relative flex items-center justify-center border-4 border-white/5 bg-black/40 overflow-hidden group";
-            lightGreen.className = "w-40 h-40 rounded-full transition-all duration-500 relative flex items-center justify-center border-4 border-white/5 bg-black/40 overflow-hidden group";
+            // Reset glow and text states
+            glowRed.classList.remove('opacity-100', 'glow-active');
+            glowYellow.classList.remove('opacity-100', 'glow-active');
+            glowGreen.classList.remove('opacity-100', 'glow-active');
 
-            // Hide all texts
+            lightRed.classList.remove('shadow-neon-red', 'scale-105', 'border-red-400/50');
+            lightYellow.classList.remove('shadow-neon-yellow', 'scale-105', 'border-yellow-400/50');
+            lightGreen.classList.remove('shadow-neon-green', 'scale-105', 'border-green-400/50');
+
             redText.classList.add('hidden');
             yellowText.classList.add('hidden');
             greenText.classList.add('hidden');
 
+            ampelHousing.classList.remove('shadow-[0_0_80px_rgba(255,59,48,0.25)]', 'shadow-[0_0_80px_rgba(255,204,0,0.25)]', 'shadow-[0_0_80px_rgba(52,199,89,0.25)]');
+
+            headerDot.className = "relative inline-flex rounded-full h-3.5 w-3.5 transition-all duration-500";
+            headerDotPing.className = "animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 transition-all duration-500";
+
             // Apply active styles and colors based on the current state
             if (color === 'red') {
-                lightRed.classList.add('bg-ampelRed', 'shadow-[0_0_50px_rgba(239,68,68,0.8)]', 'border-red-400/50', 'scale-105');
+                glowRed.classList.add('opacity-100', 'glow-active');
+                lightRed.classList.add('shadow-neon-red', 'scale-105', 'border-red-400/50');
                 redText.classList.remove('hidden');
+                ampelHousing.classList.add('shadow-[0_0_80px_rgba(255,59,48,0.25)]');
                 
-                // Red has flashing animation
-                if (selectedRole === 'father') {
-                    lightRed.classList.add('pulse-active');
-                }
-
-                statusBanner.className = "w-full py-3 px-4 rounded-2xl text-center text-sm font-semibold transition-all duration-500 glass-panel border-red-500/50 bg-red-950/40 text-red-200 shadow-[0_0_20px_rgba(239,68,68,0.3)]";
+                statusBanner.className = "w-full py-4 px-6 rounded-2xl text-center text-sm font-extrabold transition-all duration-500 glass-premium border-red-500/40 bg-red-950/20 text-red-400 shadow-[0_0_30px_rgba(255,59,48,0.15)]";
                 statusBanner.innerText = "🛑 Alarm! Lautstärke ist VIEL ZU LAUT!";
+
+                headerDot.classList.add('bg-ampelRed', 'shadow-[0_0_10px_rgba(255,59,48,0.8)]');
+                headerDotPing.classList.add('bg-ampelRed');
             } else if (color === 'yellow') {
-                lightYellow.classList.add('bg-ampelYellow', 'shadow-[0_0_50px_rgba(234,179,8,0.8)]', 'border-yellow-400/50', 'scale-105');
+                glowYellow.classList.add('opacity-100', 'glow-active');
+                lightYellow.classList.add('shadow-neon-yellow', 'scale-105', 'border-yellow-400/50');
                 yellowText.classList.remove('hidden');
+                ampelHousing.classList.add('shadow-[0_0_80px_rgba(255,204,0,0.25)]');
 
-                statusBanner.className = "w-full py-3 px-4 rounded-2xl text-center text-sm font-semibold transition-all duration-500 glass-panel border-yellow-500/50 bg-yellow-950/40 text-yellow-200 shadow-[0_0_20px_rgba(234,179,8,0.3)]";
-                statusBanner.innerText = "⚠️ Achtung! Bitte leiser sprechen.";
+                statusBanner.className = "w-full py-4 px-6 rounded-2xl text-center text-sm font-extrabold transition-all duration-500 glass-premium border-yellow-500/40 bg-yellow-950/20 text-yellow-400 shadow-[0_0_30px_rgba(255,204,0,0.15)]";
+                statusBanner.innerText = "⚠️ Achtung! Bitte etwas leiser sprechen.";
+
+                headerDot.classList.add('bg-ampelYellow', 'shadow-[0_0_10px_rgba(255,204,0,0.8)]');
+                headerDotPing.classList.add('bg-ampelYellow');
             } else if (color === 'green') {
-                lightGreen.classList.add('bg-ampelGreen', 'shadow-[0_0_50px_rgba(34,197,94,0.8)]', 'border-green-400/50', 'scale-105');
+                glowGreen.classList.add('opacity-100', 'glow-active');
+                lightGreen.classList.add('shadow-neon-green', 'scale-105', 'border-green-400/50');
                 greenText.classList.remove('hidden');
+                ampelHousing.classList.add('shadow-[0_0_80px_rgba(52,199,89,0.25)]');
 
-                statusBanner.className = "w-full py-3 px-4 rounded-2xl text-center text-sm font-semibold transition-all duration-500 glass-panel border-green-500/50 bg-green-950/40 text-green-200 shadow-[0_0_20px_rgba(34,197,94,0.3)]";
+                statusBanner.className = "w-full py-4 px-6 rounded-2xl text-center text-sm font-extrabold transition-all duration-500 glass-premium border-green-500/40 bg-green-950/20 text-green-400 shadow-[0_0_30px_rgba(52,199,89,0.15)]";
                 statusBanner.innerText = "✅ Alles super! Angenehme Lautstärke.";
+
+                headerDot.classList.add('bg-ampelGreen', 'shadow-[0_0_10px_rgba(52,199,89,0.8)]');
+                headerDotPing.classList.add('bg-ampelGreen');
             }
 
-            // Ensure cursor styles re-apply if mother role
+            // Interactive cursor for Mother
             if (selectedRole === 'mother') {
-                lightRed.classList.add('cursor-pointer', 'hover:scale-110');
-                lightYellow.classList.add('cursor-pointer', 'hover:scale-110');
-                lightGreen.classList.add('cursor-pointer', 'hover:scale-110');
+                lightRed.classList.add('cursor-pointer', 'hover:scale-110', 'active:scale-95');
+                lightYellow.classList.add('cursor-pointer', 'hover:scale-110', 'active:scale-95');
+                lightGreen.classList.add('cursor-pointer', 'hover:scale-110', 'active:scale-95');
             }
         }
 
@@ -460,10 +657,9 @@
             changeRoleBtn.classList.remove('hidden');
 
             if (role === 'mother') {
-                roleBadge.className = "px-3 py-1 text-xs font-semibold rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30 backdrop-blur-md";
-                roleBadge.innerText = "Mutter (Steuerung)";
+                roleBadge.className = "px-3 py-1.5 text-xs font-bold rounded-lg bg-pink-500/10 text-pink-300 border border-pink-500/20 backdrop-blur-md";
+                roleBadge.innerText = "Mutter (Fernsteuerung)";
                 
-                // Enable click interactions
                 lightRed.disabled = false;
                 lightYellow.disabled = false;
                 lightGreen.disabled = false;
@@ -471,10 +667,9 @@
                 motherInstructions.classList.remove('hidden');
                 fatherSettings.classList.add('hidden');
             } else {
-                roleBadge.className = "px-3 py-1 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 backdrop-blur-md";
+                roleBadge.className = "px-3 py-1.5 text-xs font-bold rounded-lg bg-blue-500/10 text-blue-300 border border-blue-500/20 backdrop-blur-md";
                 roleBadge.innerText = "Vater (Anzeige)";
                 
-                // Disable clicking for father
                 lightRed.disabled = true;
                 lightYellow.disabled = true;
                 lightGreen.disabled = true;
@@ -482,7 +677,7 @@
                 motherInstructions.classList.add('hidden');
                 fatherSettings.classList.remove('hidden');
                 
-                // Auto-trigger audio context enable on mousemove/click on body so audio works
+                // Unlock audio context cleanly on desktop/mobile
                 const unlockAudio = () => {
                     if (!audioContext) {
                         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -510,16 +705,14 @@
         });
 
         changeRoleBtn.addEventListener('click', () => {
-            // Remove state
             localStorage.removeItem('ampel_user_role');
             localStorage.removeItem('ampel_auth_mother');
             
-            // Go to select screen
             ampelInterface.classList.add('hidden');
             passwordScreen.classList.add('hidden');
             changeRoleBtn.classList.add('hidden');
-            roleBadge.className = "px-3 py-1 text-xs font-semibold rounded-full bg-slate-700 text-slate-300";
-            roleBadge.innerText = "Wähle eine Rolle...";
+            roleBadge.className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-white/5 text-slate-400";
+            roleBadge.innerText = "Wird verbunden...";
             roleSelectionScreen.classList.remove('hidden');
         });
 
@@ -551,7 +744,7 @@
             motherPasswordInput.value = '';
         });
 
-        // Click listeners on Traffic Lights (only active when enabled)
+        // Click listeners on Traffic Lights
         lightRed.addEventListener('click', () => {
             if (selectedRole === 'mother') saveStatus('red');
         });
@@ -560,6 +753,29 @@
         });
         lightGreen.addEventListener('click', () => {
             if (selectedRole === 'mother') saveStatus('green');
+        });
+
+        // Sound Test Button for Father
+        soundTestBtn.addEventListener('click', () => {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            playAlertBeep(523.25, 'sine', 0.25);
+            setTimeout(() => playAlertBeep(659.25, 'sine', 0.35), 180);
+            speakWarning("Testton erfolgreich abgespielt.");
+        });
+
+        // Installation Modal Event Handlers
+        installAppBtn.addEventListener('click', () => {
+            installModal.classList.remove('hidden');
+        });
+        const hideInstallModal = () => {
+            installModal.classList.add('hidden');
+        };
+        closeInstallModal.addEventListener('click', hideInstallModal);
+        closeInstallModalBtn.addEventListener('click', hideInstallModal);
+        installModal.addEventListener('click', (e) => {
+            if (e.target === installModal) hideInstallModal();
         });
 
         // Start Auth process immediately
