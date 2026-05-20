@@ -1,235 +1,547 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="h-full bg-slate-900 text-slate-100">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Praxis Ataraxia | Seelenruhe</title>
+    <title>Lautstärke-Ampel für Papa</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ampelRed: '#ef4444',
+                        ampelYellow: '#eab308',
+                        ampelGreen: '#22c55e',
+                    },
+                    boxShadow: {
+                        'red-glow': '0 0 50px 15px rgba(239, 68, 68, 0.6)',
+                        'yellow-glow': '0 0 50px 15px rgba(234, 179, 8, 0.6)',
+                        'green-glow': '0 0 50px 15px rgba(34, 197, 94, 0.6)',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --bg-color: #d1d9cf; /* Salbeigrüner Hintergrund */
-            --glass-bg: rgba(255, 255, 255, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.6);
-            --text-dark: #3a4d39; /* Dunkelgrüner Text */
-            --accent-green: #4f6f52;
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            min-height: 100vh;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Flüssige Hintergrund-Elemente */
-        .liquid-blob {
-            position: fixed;
-            z-index: -1;
-            background: rgba(255, 255, 255, 0.3);
-            filter: blur(40px);
-            border-radius: 50%;
-            animation: float 20s infinite alternate ease-in-out;
-        }
-
-        .blob-1 { width: 500px; height: 500px; top: -100px; right: -100px; }
-        .blob-2 { width: 400px; height: 400px; bottom: -50px; left: -50px; animation-delay: -5s; }
-
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 100px) scale(1.1); }
-        }
-
-        /* Header / Logo Bereich */
-        header {
-            text-align: center;
-            padding: 4rem 1rem;
-        }
-
-        .logo-img {
-            width: 80px;
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
-        }
-
-        h1.brand-name {
-            font-size: 2.5rem;
-            font-weight: 500;
-            color: var(--accent-green);
-        }
-
-        .tagline {
-            font-size: 1.1rem;
-            opacity: 0.8;
-            margin-bottom: 3rem;
-        }
-
-        /* Glass-Container Styling */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-            padding: 2rem;
-            transition: transform 0.3s ease;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Hero Button */
-        .btn-start {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid var(--glass-border);
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--accent-green);
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-        }
-
-        .btn-start:hover {
-            background: white;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-        }
-
-        /* Team Section */
-        .team-container {
-            display: flex;
-            gap: 2rem;
-            max-width: 1000px;
-            width: 90%;
-            margin: 4rem 0;
-        }
-
-        .member {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid white;
-        }
-
-        .member-info h3 {
-            font-size: 1.4rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .member-info p {
-            font-size: 0.9rem;
-            line-height: 1.4;
-            opacity: 0.9;
-        }
-
-        /* Zentrales Zitat/Banner */
-        .quote-banner {
-            width: 90%;
-            max-width: 800px;
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .quote-banner h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            color: var(--accent-green);
-        }
-
-        /* Footer Kontakt */
-        footer {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-bottom: 4rem;
-        }
-
-        .btn-contact {
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px solid var(--glass-border);
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            font-weight: bold;
-            color: var(--accent-green);
-            cursor: pointer;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .team-container { flex-direction: column; }
-            h1.brand-name { font-size: 2rem; }
+        .pulse-active {
+            animation: pulse-slow 2s infinite;
         }
     </style>
 </head>
-<body>
+<body class="h-full flex flex-col justify-between font-sans overflow-x-hidden">
 
-    <div class="liquid-blob blob-1"></div>
-    <div class="liquid-blob blob-2"></div>
-
-    <header>
-        <div class="logo-area">
-            <svg class="logo-img" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50 20C40 20 30 25 25 35C20 45 20 55 25 65C30 75 40 80 50 80C60 80 70 75 75 65C80 55 80 45 75 35C70 25 60 20 50 20Z" stroke="#4f6f52" stroke-width="2"/>
-                <path d="M30 85H70M50 80V95" stroke="#4f6f52" stroke-width="2"/>
-            </svg>
-            <h1 class="brand-name">Praxis Ataraxia</h1>
-            <p class="tagline">Die Praxis für dein Leben</p>
+    <!-- Header -->
+    <header class="bg-slate-800/80 backdrop-blur border-b border-slate-700 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-3 h-3 rounded-full bg-ampelRed animate-ping"></div>
+            <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-red-400 via-yellow-400 to-green-400 bg-clip-text text-transparent">
+                Familien-Ampel
+            </h1>
         </div>
-
-        <button class="btn-start">Beginnen Sie Ihre Reise</button>
+        <div class="flex items-center space-x-2">
+            <span id="roleBadge" class="px-3 py-1 text-xs font-semibold rounded-full bg-slate-700 text-slate-300">
+                Wähle eine Rolle...
+            </span>
+            <button id="changeRoleBtn" class="text-xs text-indigo-400 hover:text-indigo-300 underline cursor-pointer hidden">
+                Rolle wechseln
+            </button>
+        </div>
     </header>
 
-    <main>
-        <div class="team-container">
-            <div class="glass-card member">
-                <div class="avatar-placeholder" style="width:120px; height:120px; background:#ccc; border-radius:50%;"></div>
-                <div class="member-info">
-                    <h3>Dr. Logos</h3>
-                    <p>Meister der Diagnostik. Analysiert 'KENE DOXA' (Vanity). Bestimmt rationale Bedürfnisse.</p>
-                </div>
+    <!-- Main Content Area -->
+    <main class="flex-grow flex flex-col items-center justify-center p-4 md:p-8 max-w-4xl mx-auto w-full">
+        
+        <!-- LOADING SPINNER -->
+        <div id="loadingScreen" class="flex flex-col items-center space-y-4">
+            <div class="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+            <p class="text-slate-400 text-sm">Verbindung zur Ampel wird hergestellt...</p>
+        </div>
+
+        <!-- ROLE SELECTION SCREEN -->
+        <div id="roleSelectionScreen" class="hidden w-full max-w-md space-y-6 animate-fade-in">
+            <div class="text-center space-y-2 mb-6">
+                <h2 class="text-2xl font-bold text-white">Wer benutzt diese App gerade?</h2>
+                <p class="text-slate-400 text-sm">Wähle deine Rolle aus, um fortzufahren.</p>
             </div>
 
-            <div class="glass-card member">
-                <div class="avatar-placeholder" style="width:120px; height:120px; background:#ccc; border-radius:50%;"></div>
-                <div class="member-info">
-                    <h3>Mareike</h3>
-                    <p>Philosophische Therapeutin. Embodied Autarkie. Fosters Minimalism.</p>
+            <div class="grid grid-cols-1 gap-4">
+                <!-- Mutter Button -->
+                <button id="selectMotherBtn" class="flex items-center p-5 bg-slate-800 hover:bg-slate-700/80 border border-slate-700 hover:border-indigo-500/50 rounded-2xl transition duration-200 text-left group">
+                    <div class="p-3 bg-pink-500/10 rounded-xl text-pink-400 group-hover:scale-110 transition duration-200 mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Mutter (Steuerung)</h3>
+                        <p class="text-xs text-slate-400 mt-1">Du kannst die Ampelfarben ändern, wenn es zu laut wird. Passwortgeschützt.</p>
+                    </div>
+                </button>
+
+                <!-- Vater Button -->
+                <button id="selectFatherBtn" class="flex items-center p-5 bg-slate-800 hover:bg-slate-700/80 border border-slate-700 hover:border-indigo-500/50 rounded-2xl transition duration-200 text-left group">
+                    <div class="p-3 bg-blue-500/10 rounded-xl text-blue-400 group-hover:scale-110 transition duration-200 mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Vater (Anzeige)</h3>
+                        <p class="text-xs text-slate-400 mt-1">Du siehst die aktuelle Ampel deines Arbeitszimmers in Echtzeit auf deinem Bildschirm.</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- PASSWORD PROMPT FOR MOTHER -->
+        <div id="passwordScreen" class="hidden w-full max-w-sm space-y-6 animate-fade-in">
+            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl space-y-4">
+                <div class="text-center">
+                    <h3 class="text-lg font-bold text-white">Sicherheitsprüfung</h3>
+                    <p class="text-xs text-slate-400 mt-1">Bitte gib das Passwort ein, damit nur deine Mutter die Ampel steuern kann.</p>
+                    <p class="text-xs text-indigo-400 mt-1">(Tipp: Das Standardpasswort ist <strong class="underline">mama</strong>)</p>
+                </div>
+                <div>
+                    <input type="password" id="motherPasswordInput" placeholder="Passwort eingeben" class="w-full px-4 py-3 bg-slate-900 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-center tracking-widest text-lg">
+                    <p id="passwordError" class="text-red-400 text-xs mt-2 text-center hidden">Falsches Passwort! Bitte versuche es erneut.</p>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="cancelPasswordBtn" class="w-1/2 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl font-medium transition text-sm">Abbrechen</button>
+                    <button id="submitPasswordBtn" class="w-1/2 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-medium transition text-sm">Bestätigen</button>
                 </div>
             </div>
         </div>
 
-        <div class="glass-card quote-banner">
-            <h2>ATARAXIA: DER WEG ZUR SEELENRUHE</h2>
-            <p>WIR FINDEN DIE KLARHEIT, DIE IHNEN FEHLT.</p>
+        <!-- MAIN TRAFFIC LIGHT INTERFACE -->
+        <div id="ampelInterface" class="hidden w-full max-w-lg flex flex-col items-center space-y-8 animate-fade-in">
+            
+            <!-- Information / Status Banner -->
+            <div id="statusBanner" class="w-full py-3 px-4 rounded-xl text-center text-sm font-semibold transition duration-300">
+                Wird geladen...
+            </div>
+
+            <!-- THE AMPEL (TRAFFIC LIGHT) BOARD -->
+            <div class="bg-slate-950 p-6 rounded-[40px] shadow-2xl border-4 border-slate-800 flex flex-col space-y-6 w-full max-w-[280px] items-center relative">
+                
+                <!-- Red Light -->
+                <button id="lightRed" class="w-36 h-36 rounded-full transition-all duration-300 relative flex items-center justify-center border-4 border-slate-900" disabled>
+                    <div class="absolute inset-0 rounded-full opacity-10 bg-red-600"></div>
+                    <span class="text-slate-950 font-black text-xl tracking-wider select-none hidden" id="redText">STOPP</span>
+                </button>
+
+                <!-- Yellow Light -->
+                <button id="lightYellow" class="w-36 h-36 rounded-full transition-all duration-300 relative flex items-center justify-center border-4 border-slate-900" disabled>
+                    <div class="absolute inset-0 rounded-full opacity-10 bg-yellow-500"></div>
+                    <span class="text-slate-950 font-black text-xl tracking-wider select-none hidden" id="yellowText">LEISER</span>
+                </button>
+
+                <!-- Green Light -->
+                <button id="lightGreen" class="w-36 h-36 rounded-full transition-all duration-300 relative flex items-center justify-center border-4 border-slate-900" disabled>
+                    <div class="absolute inset-0 rounded-full opacity-10 bg-green-500"></div>
+                    <span class="text-slate-950 font-black text-xl tracking-wider select-none hidden" id="greenText">SUPER</span>
+                </button>
+            </div>
+
+            <!-- FATHER ONLY EXTRA SETTINGS -->
+            <div id="fatherSettings" class="hidden w-full bg-slate-800/60 border border-slate-700/85 rounded-2xl p-5 space-y-4">
+                <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Benachrichtigungs-Einstellungen für Papa:</h4>
+                
+                <div class="flex flex-col space-y-3">
+                    <!-- Audio Beep Trigger -->
+                    <label class="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl border border-slate-800 cursor-pointer hover:bg-slate-900 transition">
+                        <span class="text-sm text-slate-300">Sound-Effekt abspielen bei Signal-Änderung</span>
+                        <input type="checkbox" id="soundToggle" class="sr-only peer" checked>
+                        <div class="relative w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                    </label>
+
+                    <!-- Text to Speech Voice Trigger -->
+                    <label class="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl border border-slate-800 cursor-pointer hover:bg-slate-900 transition">
+                        <span class="text-sm text-slate-300">Sprachausgabe aktivieren ("Bitte leiser sprechen!")</span>
+                        <input type="checkbox" id="voiceToggle" class="sr-only peer">
+                        <div class="relative w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                    </label>
+                </div>
+                <div class="text-xs text-slate-400 bg-slate-900/30 p-2 rounded-lg border border-slate-800/50">
+                    💡 <strong>Tipp für Papa:</strong> Lass diesen Tab einfach im Hintergrund oder auf einem zweiten Monitor geöffnet. Bei Farbänderungen wirst du optisch (oder akustisch) gewarnt.
+                </div>
+            </div>
+
+            <!-- MOTHER CONTROLS INSTRUCTIONS -->
+            <div id="motherInstructions" class="hidden text-center text-sm text-slate-400 max-w-xs">
+                👉 Klicke einfach auf eine der Ampelleuchten oben, um das Signal auf dem Bildschirm von Papa sofort zu ändern.
+            </div>
         </div>
+
     </main>
 
-    <footer>
-        <button class="btn-contact">KONTAKTIEREN SIE UNS JETZT</button>
+    <!-- Footer -->
+    <footer class="bg-slate-950 py-4 px-6 text-center text-xs text-slate-500 border-t border-slate-900">
+        Lautstärke-Ampel &copy; 2026. Entwickelt für die beste Arbeitszimmer-Atmosphäre!
     </footer>
 
+    <!-- Firebase SDK Imports -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Variables from Canvas Environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'lautstaerke-ampel-standard';
+        const firebaseConfig = JSON.parse(__firebase_config);
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Local state
+        let currentUser = null;
+        let selectedRole = null; // 'mother' or 'father'
+        let currentStatus = { color: 'green' }; // Default value if db document is not initialized
+        let firstLoad = true;
+        let audioContext = null;
+
+        // Dom Elements
+        const loadingScreen = document.getElementById('loadingScreen');
+        const roleSelectionScreen = document.getElementById('roleSelectionScreen');
+        const passwordScreen = document.getElementById('passwordScreen');
+        const ampelInterface = document.getElementById('ampelInterface');
+        
+        const selectMotherBtn = document.getElementById('selectMotherBtn');
+        const selectFatherBtn = document.getElementById('selectFatherBtn');
+        const changeRoleBtn = document.getElementById('changeRoleBtn');
+        const roleBadge = document.getElementById('roleBadge');
+        
+        const motherPasswordInput = document.getElementById('motherPasswordInput');
+        const submitPasswordBtn = document.getElementById('submitPasswordBtn');
+        const cancelPasswordBtn = document.getElementById('cancelPasswordBtn');
+        const passwordError = document.getElementById('passwordError');
+
+        const statusBanner = document.getElementById('statusBanner');
+        const lightRed = document.getElementById('lightRed');
+        const lightYellow = document.getElementById('lightYellow');
+        const lightGreen = document.getElementById('lightGreen');
+
+        const redText = document.getElementById('redText');
+        const yellowText = document.getElementById('yellowText');
+        const greenText = document.getElementById('greenText');
+
+        const fatherSettings = document.getElementById('fatherSettings');
+        const motherInstructions = document.getElementById('motherInstructions');
+        const soundToggle = document.getElementById('soundToggle');
+        const voiceToggle = document.getElementById('voiceToggle');
+
+        // Firestore reference following Rule 1 (Strict Paths for public data)
+        const statusDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'traffic-light', 'status');
+
+        // Step 1: Handle Authentication (Rule 3)
+        const initAuth = async () => {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (error) {
+                console.error("Auth-Error: ", error);
+            }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                // Loading finished, show role selection or restore saved role
+                loadingScreen.classList.add('hidden');
+                
+                const savedRole = localStorage.getItem('ampel_user_role');
+                if (savedRole === 'mother' && localStorage.getItem('ampel_auth_mother') === 'true') {
+                    setRole('mother');
+                } else if (savedRole === 'father') {
+                    setRole('father');
+                } else {
+                    roleSelectionScreen.classList.remove('hidden');
+                }
+                
+                // Start listening to the Traffic Light changes in Firestore
+                setupSync();
+            }
+        });
+
+        // Step 2: Sync state with Firestore
+        function setupSync() {
+            if (!currentUser) return;
+
+            // Real-time synchronization (onSnapshot) with Error Handling
+            onSnapshot(statusDocRef, (docSnapshot) => {
+                if (docSnapshot.exists()) {
+                    const data = docSnapshot.data();
+                    handleStatusChange(data);
+                } else {
+                    // Document doesn't exist, initialize default green status
+                    saveStatus('green');
+                }
+            }, (error) => {
+                console.error("Firestore-Fehler beim Laden des Status:", error);
+            });
+        }
+
+        // Web Audio API Beep Generator
+        function playAlertBeep(frequency, type, duration) {
+            if (!soundToggle.checked) return;
+            try {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                
+                osc.type = type || 'sine';
+                osc.frequency.value = frequency || 440;
+                
+                gain.gain.setValueAtTime(0.15, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + duration);
+                
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                osc.start();
+                osc.stop(audioContext.currentTime + duration);
+            } catch (e) {
+                console.warn("Audio Context Fehler (Benutzerinteraktion erforderlich):", e);
+            }
+        }
+
+        // Text to Speech
+        function speakWarning(text) {
+            if (!voiceToggle.checked) return;
+            try {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'de-DE';
+                    utterance.rate = 1.0;
+                    window.speechSynthesis.speak(utterance);
+                }
+            } catch (e) {
+                console.error("Sprachausgabe-Fehler:", e);
+            }
+        }
+
+        // Handle Reactivity on State changes
+        function handleStatusChange(statusData) {
+            const oldColor = currentStatus.color;
+            currentStatus = statusData;
+
+            // Sound alerts if it's NOT the first initial load and color changed (for Father)
+            if (!firstLoad && selectedRole === 'father' && oldColor !== statusData.color) {
+                if (statusData.color === 'yellow') {
+                    // Two quick warm warning tones
+                    playAlertBeep(523.25, 'triangle', 0.2); // C5
+                    setTimeout(() => playAlertBeep(587.33, 'triangle', 0.25), 150); // D5
+                    setTimeout(() => speakWarning("Bitte etwas leiser sprechen"), 600);
+                } else if (statusData.color === 'red') {
+                    // High-pitched critical warning tones
+                    playAlertBeep(659.25, 'sawtooth', 0.15); // E5
+                    setTimeout(() => playAlertBeep(659.25, 'sawtooth', 0.15), 180);
+                    setTimeout(() => playAlertBeep(659.25, 'sawtooth', 0.4), 360);
+                    setTimeout(() => speakWarning("Bitte sofort leiser sprechen! Es ist viel zu laut."), 800);
+                } else if (statusData.color === 'green') {
+                    // Friendly low notification chime
+                    playAlertBeep(349.23, 'sine', 0.3); // F4
+                    setTimeout(() => playAlertBeep(523.25, 'sine', 0.4), 200); // C5
+                }
+            }
+            firstLoad = false;
+
+            updateAmpelUI();
+        }
+
+        // Save Ampel status to Firestore
+        async function saveStatus(color) {
+            if (!currentUser) return;
+            try {
+                await setDoc(statusDocRef, {
+                    color: color,
+                    updatedAt: new Date().toISOString(),
+                    updatedBy: currentUser.uid
+                });
+            } catch (err) {
+                console.error("Konnte Status nicht in Firestore speichern:", err);
+            }
+        }
+
+        // Update the visual representation of the traffic light
+        function updateAmpelUI() {
+            const color = currentStatus.color;
+
+            // Reset all lights
+            lightRed.className = "w-36 h-36 rounded-full transition-all duration-300 relative flex items-center justify-center border-4 border-slate-900";
+            lightYellow.className = "w-36 h-36 rounded-full transition-all duration-300 relative flex items-center justify-center border-4 border-slate-900";
+            lightGreen.className = "w-36 h-36 rounded-full transition-all duration-300 relative flex items-center justify-center border-4 border-slate-900";
+
+            // Hide all texts
+            redText.classList.add('hidden');
+            yellowText.classList.add('hidden');
+            greenText.classList.add('hidden');
+
+            // Apply active styles and colors based on the current state
+            if (color === 'red') {
+                lightRed.classList.add('bg-ampelRed', 'shadow-red-glow');
+                redText.classList.remove('hidden');
+                
+                // Red has flashing animation
+                if (selectedRole === 'father') {
+                    lightRed.classList.add('pulse-active');
+                }
+
+                statusBanner.className = "w-full py-3 px-4 rounded-xl text-center text-sm font-semibold transition duration-300 bg-red-950/80 text-red-300 border border-red-800/60";
+                statusBanner.innerText = "🛑 Alarm! Lautstärke ist VIEL ZU LAUT!";
+            } else if (color === 'yellow') {
+                lightYellow.classList.add('bg-ampelYellow', 'shadow-yellow-glow');
+                yellowText.classList.remove('hidden');
+
+                statusBanner.className = "w-full py-3 px-4 rounded-xl text-center text-sm font-semibold transition duration-300 bg-yellow-950/80 text-yellow-300 border border-yellow-800/60";
+                statusBanner.innerText = "⚠️ Achtung! Bitte leiser sprechen.";
+            } else if (color === 'green') {
+                lightGreen.classList.add('bg-ampelGreen', 'shadow-green-glow');
+                greenText.classList.remove('hidden');
+
+                statusBanner.className = "w-full py-3 px-4 rounded-xl text-center text-sm font-semibold transition duration-300 bg-green-950/80 text-green-300 border border-green-800/60";
+                statusBanner.innerText = "✅ Alles super! Angenehme Lautstärke.";
+            }
+        }
+
+        // Apply role permissions to controls
+        function setRole(role) {
+            selectedRole = role;
+            localStorage.setItem('ampel_user_role', role);
+
+            roleSelectionScreen.classList.add('hidden');
+            passwordScreen.classList.add('hidden');
+            ampelInterface.classList.remove('hidden');
+            changeRoleBtn.classList.remove('hidden');
+
+            if (role === 'mother') {
+                roleBadge.className = "px-3 py-1 text-xs font-semibold rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30";
+                roleBadge.innerText = "Mutter (Steuerung)";
+                
+                // Enable click interactions
+                lightRed.disabled = false;
+                lightYellow.disabled = false;
+                lightGreen.disabled = false;
+
+                // Add pointer cursor class
+                lightRed.classList.add('cursor-pointer', 'hover:scale-105');
+                lightYellow.classList.add('cursor-pointer', 'hover:scale-105');
+                lightGreen.classList.add('cursor-pointer', 'hover:scale-105');
+
+                motherInstructions.classList.remove('hidden');
+                fatherSettings.classList.add('hidden');
+            } else {
+                roleBadge.className = "px-3 py-1 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30";
+                roleBadge.innerText = "Vater (Anzeige)";
+                
+                // Disable clicking for father
+                lightRed.disabled = true;
+                lightYellow.disabled = true;
+                lightGreen.disabled = true;
+
+                // Remove pointer cursor
+                lightRed.classList.remove('cursor-pointer', 'hover:scale-105');
+                lightYellow.classList.remove('cursor-pointer', 'hover:scale-105');
+                lightGreen.classList.remove('cursor-pointer', 'hover:scale-105');
+
+                motherInstructions.classList.add('hidden');
+                fatherSettings.classList.remove('hidden');
+                
+                // Auto-trigger audio context enable on mousemove/click on body so audio works
+                const unlockAudio = () => {
+                    if (!audioContext) {
+                        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+                    if (audioContext && audioContext.state === 'suspended') {
+                        audioContext.resume();
+                    }
+                    document.removeEventListener('click', unlockAudio);
+                };
+                document.addEventListener('click', unlockAudio);
+            }
+
+            updateAmpelUI();
+        }
+
+        // Event Listeners for Role Selection
+        selectMotherBtn.addEventListener('click', () => {
+            roleSelectionScreen.classList.add('hidden');
+            passwordScreen.classList.remove('hidden');
+            motherPasswordInput.focus();
+        });
+
+        selectFatherBtn.addEventListener('click', () => {
+            setRole('father');
+        });
+
+        changeRoleBtn.addEventListener('click', () => {
+            // Remove state
+            localStorage.removeItem('ampel_user_role');
+            localStorage.removeItem('ampel_auth_mother');
+            
+            // Go to select screen
+            ampelInterface.classList.add('hidden');
+            passwordScreen.classList.add('hidden');
+            changeRoleBtn.classList.add('hidden');
+            roleBadge.className = "px-3 py-1 text-xs font-semibold rounded-full bg-slate-700 text-slate-300";
+            roleBadge.innerText = "Wähle eine Rolle...";
+            roleSelectionScreen.classList.remove('hidden');
+        });
+
+        // Password Verification for Mother
+        function verifyMotherPassword() {
+            const entered = motherPasswordInput.value.trim().toLowerCase();
+            if (entered === 'mama') {
+                passwordError.classList.add('hidden');
+                motherPasswordInput.value = '';
+                localStorage.setItem('ampel_auth_mother', 'true');
+                setRole('mother');
+            } else {
+                passwordError.classList.remove('hidden');
+                motherPasswordInput.select();
+            }
+        }
+
+        submitPasswordBtn.addEventListener('click', verifyMotherPassword);
+        motherPasswordInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                verifyMotherPassword();
+            }
+        });
+
+        cancelPasswordBtn.addEventListener('click', () => {
+            passwordScreen.classList.add('hidden');
+            roleSelectionScreen.classList.remove('hidden');
+            passwordError.classList.add('hidden');
+            motherPasswordInput.value = '';
+        });
+
+        // Click listeners on Traffic Lights (only active when enabled)
+        lightRed.addEventListener('click', () => {
+            if (selectedRole === 'mother') saveStatus('red');
+        });
+        lightYellow.addEventListener('click', () => {
+            if (selectedRole === 'mother') saveStatus('yellow');
+        });
+        lightGreen.addEventListener('click', () => {
+            if (selectedRole === 'mother') saveStatus('green');
+        });
+
+        // Start Auth process immediately
+        initAuth();
+    </script>
 </body>
 </html>
