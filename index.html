@@ -194,7 +194,14 @@
 
         // Global Variables from Canvas Environment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'lautstaerke-ampel-standard';
-        const firebaseConfig = JSON.parse(__firebase_config);
+        const firebaseConfig = {
+  apiKey: "AIzaSyB1nVIHbK551nqzsLejDnRY52dVFA_7iKA",
+  authDomain: "ampel-2a7e5.firebaseapp.com",
+  projectId: "ampel-2a7e5",
+  storageBucket: "ampel-2a7e5.firebasestorage.app",
+  messagingSenderId: "1094677496869",
+  appId: "1:1094677496869:web:ee7f78c249282c4572ebcc"
+};
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
